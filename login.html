@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Secure Login</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+  }
+
+  .card {
+    width: 340px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+    border-radius: 15px;
+    padding: 25px;
+    color: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .status {
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 15px;
+    padding: 8px;
+    border-radius: 8px;
+  }
+
+  .online {
+    background: rgba(0,255,0,0.2);
+    color: #7CFF7C;
+  }
+
+  .offline {
+    background: rgba(255,0,0,0.2);
+    color: #ff6b6b;
+  }
+
+  input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #00c6ff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background: #0072ff;
+  }
+
+  button:disabled {
+    background: gray;
+    cursor: not-allowed;
+  }
+
+  .note {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+    opacity: 0.9;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Secure Login</h2>
+
+  <div id="statusBox" class="status offline">
+    Checking network...
+  </div>
+
+  <input type="text" id="user" placeholder="Username">
+  <input type="password" id="pass" placeholder="Password">
+
+  <button id="loginBtn" onclick="login()">Login</button>
+
+  <div class="note">
+    System allows login only when internet is active
+  </div>
+</div>
+
+<script>
+  const statusBox = document.getElementById("statusBox");
+  const loginBtn = document.getElementById("loginBtn");
+
+  function updateNetwork() {
+    if (navigator.onLine) {
+      statusBox.className = "status online";
+      statusBox.innerHTML =
+        "🟢 You are connected with network, that's why I'm allowing you to login";
+
+      loginBtn.disabled = false;
+    } else {
+      statusBox.className = "status offline";
+      statusBox.innerHTML =
+        "🔴 No internet connection. Login is blocked.";
+
+      loginBtn.disabled = true;
+    }
+  }
+
+  window.addEventListener("online", updateNetwork);
+  window.addEventListener("offline", updateNetwork);
+
+  function login() {
+    if (!navigator.onLine) {
+      alert("No internet connection!");
+      return;
+    }
+
+    const u = document.getElementById("user").value;
+    const p = document.getElementById("pass").value;
+
+    if (u === "admin" && p === "1234") {
+      alert("Login Successful 🎉");
+    } else {
+      alert("Invalid credentials");
+    }
+  }
+
+  updateNetwork();
+</script>
+
+</body>
+</html>
